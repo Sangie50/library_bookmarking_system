@@ -1,0 +1,25 @@
+%p
+  %b Username:
+  = @user.username
+%p
+  %b Email:
+  = @user.email
+%p
+  %b Roles:
+  - if @user.roles.empty?
+    No roles assigned yet
+  - else
+    %ul
+    - @user.roles.each do |role|
+      %li= role
+- unless @user.department.nil?
+  %p
+    %b Department:
+    = @user.department.name
+%p
+  %b Last signed in:
+  = @user.last_sign_in_at || "Not signed in yet"
+
+/= link_to 'Edit', edit_product_path(@user)
+/\|
+= link_to 'Back', users_path

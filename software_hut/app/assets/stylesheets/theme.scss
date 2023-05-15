@@ -1,0 +1,95 @@
+// General appearance styling
+// Authors: Sophie Dillon, Sangramithra Bala Amuthan, William
+
+header nav {
+    background-color: #d9eef5;
+    color: #033076;
+    padding: 15px;
+    border-bottom: solid;
+
+    a.nav-link {
+        border-bottom: solid;
+        border-top: solid;
+        border-bottom-color: #d9eef5;
+        border-top-color: #d9eef5;
+    }
+
+    .logo {
+        height: 57px;
+    }
+
+    .navbar-brand {
+        display: block;
+        margin: auto 1vw;
+        min-height: 100%;
+    }
+}
+
+.help-popup {
+    margin-top: 30px;
+    font-size: small;
+    border: 3px solid #033076;
+    border-radius: 25px;
+    padding: 10px;
+    background-color: #fefce0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    position: fixed;
+    fill: #f1f1f1;
+    visibility: hidden;
+    z-index: 9;
+  }
+
+.flash-messages {
+    top: 4.6rem;
+}
+
+body {
+    background-color: #fefce0;
+    color: #033076;
+    margin: 33px;
+}
+
+a {
+    color: #033076;
+}
+
+a.nav-link:hover {
+    border-bottom-color: #033076;
+}
+
+.table-bordered {
+    margin: 25px 0;
+}
+
+.card-header {
+    text-align: center;
+    color: #033076;
+    font-size: 36px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+table {
+    text-align: center;
+    th {
+        background-color: #c0c0c0;
+        color: #000000;
+    }
+
+    td {
+        background-color: #FFFFFF;
+    }
+
+    td, th {
+        padding: 12px 15px;
+    }
+}

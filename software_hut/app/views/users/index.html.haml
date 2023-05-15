@@ -1,0 +1,62 @@
+%h1 Users
+
+= simple_form_for :upload_users, url: upload_users_users_path do |f|
+  = f.input :file, as: :file, label: 'Add users via CSV', required: false
+  = submit_button
+
+.help-popup
+  %p
+    This page displays all users in the system.
+    Click
+    %b 'Delete'
+    to remove a user from the system, or 
+    %b 'Show'
+    to view more information about a user.
+  %h5 Bulk add students from CSV
+  %p 
+    You can upload a spreadsheet of users to the system via a CSV file.
+    Simply click
+    %b 'Choose file'
+    to select the CSV file from your computer.
+    Then click
+    %b 'Upload'
+    to upload to the system.
+  %p
+    Your CSV must be have the columns
+    %b Username, Email, Role, Department
+    Department may only be left blank if the user is not a DLO or academic
+  %h5 Manually add user 
+  %p
+    To manually add a user click the
+    %b 'New User'
+    button found at the bottom of the page.
+  %button.btn.help-close Close
+
+%table
+  %thead
+    %tr
+      %th Username
+      %th Email address
+      %th Roles
+      %th
+      %th
+
+  %tbody
+    - if @users.empty?
+      = no_record_tr 5
+    - else
+      - @users.each do |user|
+        %tr
+          %td= user.username
+          %td= user.email
+          %td= user.roles.join(', ')
+          %td= link_to 'Show', user
+          %td= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' }
+%br 
+
+= will_paginate @users, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer
+
+= link_to 'New User', new_user_path
+
+/upload_users_uploads_path
+/, url: upload_users_uploads_path

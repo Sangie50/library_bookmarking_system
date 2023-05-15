@@ -1,0 +1,77 @@
+%h1
+  - if current_user.admin?
+    All modules
+  - elsif current_user.dlo?
+    = "Modules in #{current_user.dlo_profile.department.name}"
+  - elsif current_user.academic?
+    Your modules
+  - else
+    Modules
+
+.help-popup
+  %h3 Modules Help
+  %h4 For Academics
+  %p 
+    This page shows a list of all the modules you are registered as teaching on the system.
+    If you think a module is missing from this list, contact the Disability Liaison Officer for your department.
+  %h4 For Admin
+  %h5 Bulk add modules from CSV
+  %p
+    You can upload a spreadsheet of modules to the system via a CSV file.
+    Simply click
+    %b 'Choose file'
+    to select the CSV file from your computer.
+    Then click
+    %b 'Save'
+    to upload to the system.
+  %p 
+    Your CSV must have the columns 
+    %b 
+      Module Code, Module Name, Semester type,Academic 1, Academic 2, Academic 3. 
+      Academic 2 and Academic 3 can be left empty for any module. 
+  %h5 Edit or delete a module
+  %p 
+    Simply click the
+    %b 'Edit'
+    or
+    %b 'Delete'
+    button next to the module you wish to affect. 
+  %button.btn.help-close Close
+
+- if can? :create, CourseModule
+  = simple_form_for :course_modules, url: upload_course_modules_path do |f|
+    = f.input :file, as: :file
+    = f.button :submit, 'Add modules'
+
+
+
+%table.table-bordered
+  %thead
+    %tr
+      %th Code
+      %th Name
+      - if Department.accessible_by(current_ability).length > 1
+        %th Department
+      %th Session
+
+  %tbody
+    - if @course_modules.empty?
+      = no_record_tr 5
+    - else
+      - @course_modules.each do |course_module|
+        %tr
+          - if can? :show, course_module
+            %td= link_to course_module.full_code, course_module
+            %td= link_to course_module.name, course_module
+          - else
+            = course_module.full_code
+            = course_module.name
+          - if Department.accessible_by(current_ability).length > 1
+            %td= course_module.department.name
+          %td= course_module.session.name
+
+= will_paginate @course_modules, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer
+
+- if can? :create, CourseModule
+  = link_to 'New module', new_course_module_path
+  

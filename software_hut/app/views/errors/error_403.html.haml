@@ -1,0 +1,14 @@
+.page-header
+  %h1 
+    Access Denied
+    %sup#error-code 403
+  
+%p 
+  You are seeing this page because you have visited a page that is not available to you. This may be because:
+  %ul
+    %li You have used a direct link for a page you are not allowed to see
+    %li You have just signed in, and are seeing this page because your user account has not yet been granted any user roles
+
+%p 
+  If you continue to see this message please send a description of the problem to:
+  = mail_to "support@epigenesys.org.uk"

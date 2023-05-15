@@ -1,0 +1,35 @@
+// Place all the styles related to the Students controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+.student-left {    
+    // margin-right: 10px;
+    background-color: #eff2f3;
+    padding: 10px;
+
+    h2 {
+        background-color: #eff2f3;
+        font-size: 24px;
+        border-left: solid;
+        border-left-color: #a8c6fa;
+        padding-left: 5px;
+    }
+}
+
+.student-heading {
+    background-color: #bdc8cb;
+
+    h1 {
+        margin: 0;
+        padding: 10px;
+    }
+}
+.student-right { 
+    margin: auto;
+    padding: 10px;
+    background-color: #d8e4e7;
+    
+    p { 
+        margin: 0.5rem 0;
+    }
+}

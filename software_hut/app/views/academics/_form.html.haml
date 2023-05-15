@@ -1,0 +1,14 @@
+-# frozen_string_literal: true
+= simple_form_for(@academic) do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  .form-inputs
+    = f.input :forename, input_html: { value: @academic.user&.forename }, disabled: @academic.persisted?
+    = f.input :surname, input_html: { value: @academic.user&.surname }, disabled: @academic.persisted?
+    = f.input :email, input_html: { value: @academic.user&.email }, disabled: @academic.persisted?
+    = f.association :department, include_blank: false, collection: Department.accessible_by(current_ability)
+    = f.association :modules, collection: CourseModule.none
+
+  .form-actions
+    = f.button :submit

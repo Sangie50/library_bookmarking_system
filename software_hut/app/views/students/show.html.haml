@@ -1,0 +1,73 @@
+= stylesheet_link_tag params[:controller]
+
+.container 
+  %div
+    = link_to 'Edit student', edit_student_path(@student)
+    \|
+    = link_to 'Delete student', @student, method: :delete, data: { confirm: 'Are you sure?' }
+    \|
+    = link_to 'Back to students', students_path
+  %ul 
+  .row
+    .col-3
+      .student-left
+        %p
+          %b Registration number:
+          = @student.registration_number
+        %p
+          %b Name:
+          = @student.full_name
+        %p
+          %b Username:
+          = value_or_none @student.username, 'Not set'
+        %p
+          %b Email:
+          = value_or_none @student.email, 'Not set'
+        %p
+          %b Supervisor:
+          = value_or_none @student.supervisor&.academic.full_name, 'Not set'
+        %p
+          %b Supervisor role:
+          = value_or_none @student.supervisor&.role.name, 'Not set'
+        %p
+          %b Programme code:
+          = @student.programme_code
+        %p
+          %b Graduation date:
+          = value_or_none @student.graduation_date, 'Not set'
+
+          
+     
+    .col-9
+      .student-heading 
+        %h1 Showing #{@student.full_name}'s Details 
+      .student-right
+        - if @student.lsp.nil?
+          %p This student has no LSP
+        - else
+          - lsp = @student.lsp
+          %p
+            %b Disability information
+            = lsp.disability_info
+          %b Support recommendations
+          %p
+            %b Access, Evacuation and Emergency Care
+            = value_or_none lsp.access_evacuation_emergency_care
+          %p
+            %b Teaching
+            = value_or_none lsp.teaching
+          %p
+            %b Communication/Ongoing Contact
+            = value_or_none lsp.communication_ongoing_contact
+          %p
+            %b Examinations
+            = value_or_none lsp.exams_and_assessment
+          %p
+            %b Extenuating Circumstances
+            = value_or_none lsp.extenuating_circumstances
+          %p
+            %b Practical Course Elements
+            = value_or_none lsp.practical_course_elements
+          %p
+            %b Additional Recommendations
+            = value_or_none lsp.additional_recommendations

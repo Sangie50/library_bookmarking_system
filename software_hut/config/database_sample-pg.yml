@@ -1,0 +1,9 @@
+development:
+  adapter: postgresql
+  database: project_dev
+  min_messages: warning
+
+test:
+  adapter: postgresql
+  database: project_test
+  min_messages: warning

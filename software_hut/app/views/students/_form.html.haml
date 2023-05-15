@@ -1,0 +1,45 @@
+-# frozen_string_literal: true
+= simple_form_for(@student) do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  .form-inputs
+    %h2 Student Details
+    = f.input :registration_number, as: :string, readonly: @student.persisted?
+    = f.input :forename
+    = f.input :surname
+    = f.input :email
+    = f.label 'Programme code', required: true
+    .programme_code_input_wrapper
+      = f.association :department, label: false, label_method: :code, collection: Department.accessible_by(current_ability)
+      = f.input :partial_programme_code, as: :string, label: false
+    = simple_fields_for(@student.supervisor) do |f|
+      = f.association :academic, as: :select, selected: @student.supervisor.academic&.username, label_method: :full_name
+      = f.association :role
+    = f.input :graduation_date, as: :date, html5: true
+    %h2 LSP Information
+    - unless !@student.lsp.nil? && @student.lsp.persisted?
+      - if @student.persisted?
+        %p This student does not have an LSP, but you can add LSP information for this student by filling out the fields below.
+      - else
+        %p
+          You can
+          %strong optionally
+          add LSP information for the new student below.
+    = simple_fields_for(@student.lsp) do |f|
+      = f.input :disability_types, as: :string
+      = f.input :disability_advisor_email, as: :string
+      = f.input :date_shared, as: :date, html5: true
+      = f.input :disability_info
+      = f.input :access_evacuation_emergency_care
+      = f.input :teaching
+      = f.input :exams_and_assessment
+      = f.input :practical_course_elements
+      = f.input :communication_ongoing_contact
+      = f.input :extenuating_circumstances
+      = f.input :additional_recommendations
+
+  .form-actions
+    = f.button :submit
+    - if @student.lsp&.persisted?
+      = link_to "Delete this student's LSP", @student.lsp, method: :delete, data: { confirm: "Are you sure want to delete this student's LSP?" }

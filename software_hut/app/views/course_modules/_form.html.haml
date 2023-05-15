@@ -1,0 +1,16 @@
+-# frozen_string_literal: true
+= simple_form_for(@course_module) do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  .form-inputs
+    = f.label 'Code', required: true
+    %div.module_code_input_wrapper
+      = f.association :department, label: false, label_method: :code, collection: Department.accessible_by(current_ability)
+      = f.input :code, as: :string, label: false
+    = f.input :name
+    = f.association :session
+    = f.association :academics, label_method: :full_name, collection: Academic.accessible_by(current_ability)
+
+  .form-actions
+    = f.button :submit

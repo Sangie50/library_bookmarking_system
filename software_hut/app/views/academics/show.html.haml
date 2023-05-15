@@ -1,0 +1,21 @@
+.float-right
+  = link_to 'Edit academic', edit_academic_path(@academic)
+  \|
+  = link_to 'Delete academic', @academic, method: :delete, data: { confirm: 'Are you sure?' }
+  \|
+  = link_to 'Back to academics', academics_path
+
+%p
+  %b Name:
+  = @academic.full_name
+%p
+  %b Email address:
+  = @academic.email
+%p
+  %b Department:
+  = @academic.department.name
+%p
+  %b Modules
+  %ul
+  - @academic.modules.each do |m|
+    %li= m.label

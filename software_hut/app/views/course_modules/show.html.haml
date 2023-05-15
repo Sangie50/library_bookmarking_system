@@ -1,0 +1,32 @@
+.float-right
+  - if can? :edit, @course_module
+    %td= link_to 'Edit module', edit_course_module_path(@course_module)
+    \|
+  - if can? :destroy, @course_module
+    %td= link_to 'Delete module', @course_module, method: :delete, data: { confirm: 'Are you sure?' }
+    \|
+  = link_to 'Back to modules', course_modules_path
+
+%p
+  %b Code:
+  = "#{@course_module.department.code}#{@course_module.code}"
+%p
+  %b Name:
+  = @course_module.name
+%p
+  %b Department:
+  = @course_module.department.name
+%p
+  %b Session:
+  = @course_module.session.name
+%p
+  %b Module Leaders:
+  - if @course_module.academics.empty?
+    No academics assigned yet
+  - else
+    %ul
+      - @course_module.academics.each do |academic|
+        %li
+          = academic.full_name
+%p
+  = link_to "View students", "#{students_path}?search[department_code]=#{@course_module.department_code}&search[module_ids][]=#{@course_module.id}"

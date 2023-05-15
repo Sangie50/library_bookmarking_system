@@ -1,0 +1,120 @@
+%h1
+  - if current_user.admin?
+    All students
+  - elsif current_user.dlo?
+    = "Students in #{current_user.dlo_profile.department.name}"
+  - elsif current_user.academic?
+    Your students
+  - else
+    Students
+
+.help-popup
+  %h3 Students Help
+  %h5 Search for and filter Students
+  %p You can search for students by forename or surname. To see all students, leave these fields blank.
+  %p To filter students by module you must first select a department, then select a module from the drop-down list.
+  %p 
+    Click 
+    %b 'Update results' to view results
+  %h5 Bulk add students from CSV
+  %p
+    You can upload a spreadsheet of students to the system via a CSV file.
+    Simply click
+    %b 'Choose file'
+    to select the CSV file from your computer.
+    Then click
+    %b 'Upload' to upload to the system.
+  %h5 Add LSP to existing student
+  %p
+    If a student is already in the database, you can add an LSP to their record by clicking
+    %b 'Add LSP'.
+    If the student is not already in the database, you will have to add them first. See 'Add indiviual student' below.
+  %h5 Add individual student
+  %p 
+    You can manually add an individual student to the system by clicking
+    %b 'New Student'. 
+    This will take you to a new page.
+  %button.btn.help-close Close
+
+.container
+  .row
+    .col-3
+      #search_form
+        = simple_form_for :search, method: :get do |f|
+          %h2 Filter options
+          = f.input :forename,
+            input_html: { id: 'forename', value: search_params[:forename] },
+            required: false
+          = f.input :surname,
+            input_html: { id: 'surname', value: search_params[:surname] },
+            required: false
+          = f.input :department_code,
+            label: "Department",
+            collection: Department.accessible_by(current_ability),
+            selected: search_params[:department_code],
+            value_method: :code,
+            include_blank: '- All Departments -',
+            required: false
+          = f.input :module_ids,
+            label: 'Modules (leave blank for all modules)',
+            collection: search_module_ids,
+            input_html: { multiple: true },
+            selected: search_params[:module_ids],
+            disabled: search_module_ids.empty?,
+            label_method: :label,
+            required: false
+          = f.input nil,
+            as: :boolean,
+            label: 'LSP last updated at',
+            input_html: { id: 'search_include_date', name: nil, value: nil, checked: search_params[:updated_at].present? }
+          = f.input :updated_at,
+            as: :date,
+            disabled: true,
+            label: false,
+            required: false,
+            input_html: { value: search_params[:updated_at] },
+            html5: true
+
+          %h2 Columns
+          = simple_fields_for :columns do |f|
+            - controller.class::ATTRIBUTES.each do |attribute|
+              = f.input :names,
+                as: :boolean,
+                unchecked_value: nil,
+                checked_value: attribute,
+                label: heading_for(attribute),
+                input_html: { checked: @attributes.include?(attribute), id: "columns_name_#{attribute}", name: 'columns[names][]' }
+
+          = f.submit 'Update results', class: 'btn btn-default', id: 'search-button', name: nil
+          = link_to 'Reset', students_path, class: 'btn btn-default'
+    .col-9
+      - if current_user.roles == ['Academic']
+        %p You can only view students that have an LSP
+      - if can? :create, [Student, Lsp]
+        .float-left
+          = simple_form_for :students, url: upload_students_path do |f|
+            = f.input :file, as: :file, label: 'Add students via CSV', required: false
+            = submit_button  'Upload'
+        .float-right
+          = link_to 'Upload LSP', upload_lsps_path, class: 'ajax-modal', data: { turbolinks: false }
+          \|
+          = link_to 'New Student', new_student_path
+      %table.table-bordered.w-100
+        %thead
+          %tr
+            - @attributes.each do |attribute|
+              %th= heading_for(attribute)
+
+        %tbody
+          - if @students.empty?
+            = no_record_tr @attributes.length
+          - else
+            - @students.each do |student|
+              %tr
+                - @attributes.each do |attribute|
+                  %td
+                    - if [:registration_number, :forename, :surname].include? attribute
+                      = link_to attr_for(student, attribute), student
+                    - else
+                      = attr_for(student, attribute)
+      = will_paginate @students, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer

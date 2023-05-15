@@ -1,0 +1,17 @@
+- content_for :title, 'Upload'
+
+%h1
+
+.modal-dialog
+  .modal-content
+    = simple_form_for :extract_lsp, url: extract_lsps_path do |f|
+      .modal-header
+        %h4.modal-title Upload LSPs
+        %button.close{ type: :button, data: { dismiss: :modal } }
+          %span &times;
+      .modal-body
+        = f.input :file, as: :file, label: 'Please choose file'
+      .modal-footer
+        .pull-left
+          = dismiss_modal_button
+        = f.button :submit, class: 'btn btn-outline-dark'

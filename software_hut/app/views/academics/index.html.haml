@@ -1,0 +1,48 @@
+%h1
+  - if current_user.admin?
+    All academics
+  - elsif current_user.dlo?
+    = "Academics in #{current_user.dlo_profile.department.name}"
+
+.help-popup
+  %h3 Academics Help
+  %p 
+    This page displays all academics in the system. 
+    Click 
+    %b 'Show' 
+    to view more information about an academic or 
+    %b 'Edit' 
+    to update their details. 
+    Click
+    %b 'Delete'
+    to remove an academic from the system.
+  %h5 Manually add user 
+  %p 
+    Academics are usually added to the system automatically when modules are uploaded. 
+    To manually add an academic click the
+    %b 'New Academic'
+    button found at the bottom of the page.
+  %button.btn.help-close Close
+
+%table.table-bordered 
+  %thead
+    %tr
+      %th Surname
+      %th Forename
+      %th Email address
+      %th Department
+
+  %tbody
+    - if @academics.empty?
+      = no_record_tr 6
+    - else
+      - @academics.each do |academic|
+        %tr
+          %td= link_to academic.surname, academic
+          %td= link_to academic.forename, academic
+          %td= link_to academic.email, "mailto:#{academic.email}"
+          %td= academic.department.name
+
+= will_paginate @academics, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer
+
+= link_to 'New Academic', new_academic_path

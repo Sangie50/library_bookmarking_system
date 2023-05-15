@@ -1,0 +1,60 @@
+- content_for :title, "Home"
+
+.jumbotron.mb-3
+  %h1.display-5 You're good to go!
+  %p.lead Your new Rails application is working.
+  %p
+    This is a basic
+    = link_to 'Bootstrap 4', 'https://getbootstrap.com/docs/4.0/getting-started/introduction/'
+    template with minimal additional CSS, using
+    = link_to 'FontAwesome 5 Free', 'https://fontawesome.com/icons?d=gallery&m=free'
+    for icons.
+
+.card.mb-3
+  .card-header
+    Flash Examples
+  .card-body
+    %button#show-flash.btn.btn-outline-primary{ type: :button }
+      = icon 'fas', 'exclamation-circle', 'Show flash message'
+
+/this is the link to uploading users, didn't know where to put it
+.card.mb-3
+  .card-header
+    Upload users
+  .card-body
+    %p
+    = link_to 'Upload Users', 'users#new'
+//
+.card.mb-3
+  .card-header
+    Form Examples
+  .card-body
+    - collection = %w(These Are Some Options)
+
+    = simple_form_for :form_examples do |f|
+      = f.input :string, as: :string
+
+      = f.input :text, as: :text
+
+      = f.input :select2, as: :select, collection: collection, input_html: { class: 'select2' }, include_blank: false
+      = f.input :select, as: :select, collection: collection
+
+      = f.input :radio_buttons, as: :radio_buttons, collection: collection
+      = f.input :inline_radio_buttons, as: :radio_buttons, collection: collection, wrapper: :vertical_collection_inline
+
+      = f.input :check_boxes, as: :check_boxes, collection: collection
+      = f.input :inline_check_boxes, as: :check_boxes, collection: collection, wrapper: :vertical_collection_inline
+
+      = f.input :boolean, as: :boolean
+
+      = f.input :input_group, wrapper: :input_group do
+        .input-group-prepend
+          %span.input-group-text Prepend
+        = f.input_field :input_group_field, class: "form-control"
+        .input-group-append
+          %span.input-group-text Append
+
+:coffee
+  $ ->
+    $('#show-flash').on 'click', ->
+      $.flashAlert('Hello world!', 'alert-success')

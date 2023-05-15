@@ -1,0 +1,37 @@
+%h1 All departments
+
+.help-popup
+  %h3 Departments Help
+  %h5 Add a department
+  %p
+    To add a department to the system, click
+    %b 'Add'.
+    This will take you to a new page where you can manually input the details.
+  %h5 Edit a department
+  %p
+    Clicking the
+    %b 'Edit'
+    button next to a department will take you to a new page modify its details.
+  %button.btn.help-close Close
+
+
+%table.table-bordered 
+  %thead
+    %tr
+      %th Code
+      %th Name
+
+  %tbody
+    - if @departments.empty?
+      = no_record_tr 5
+    - else
+      - @departments.each do |department|
+        %tr
+          %td
+            = link_to department.code, department
+          %td
+            = link_to department.name, department
+
+= will_paginate @departments, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer
+
+= link_to 'New Department', new_department_path
